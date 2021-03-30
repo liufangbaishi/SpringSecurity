@@ -1,7 +1,12 @@
 package com.cheng.springsecurity.controller;
 
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 public class PageController {
@@ -50,9 +55,16 @@ public class PageController {
         return "others";
     }
 
-    @GetMapping("/error")
-    public String error(){
-        return "error";
+    @GetMapping("/login/error")
+    public void error(HttpServletRequest request, HttpServletResponse response){
+        response.setContentType("text/html;charset=utf-8");
+        AuthenticationException exception =
+                (AuthenticationException)request.getSession().getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+        try {
+            response.getWriter().write(exception.toString());
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

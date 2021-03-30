@@ -3,6 +3,8 @@ package com.cheng.springsecurity.mapper;
 import com.cheng.springsecurity.entity.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
+    List<String> getRoleCodeByUserName(String username);
 }

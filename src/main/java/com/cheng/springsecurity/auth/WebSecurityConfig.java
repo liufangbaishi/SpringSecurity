@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     /**
      * 通过auth可以在内存中构建虚拟的用户名和密码
      * @param auth
@@ -29,16 +33,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 创建了两个用户 user 和 admin 密码均为123 角色分别是 user 和 admin
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder.encode("123"))
-                .roles("user")
-                .and()
-                .withUser("admin")
-                .password(passwordEncoder.encode("123"))
-                .roles("admin")
-                // 配置auth的加密方式为passwordEncoder
-                .and()
+//        auth.inMemoryAuthentication()
+//                .withUser("user")
+//                .password(passwordEncoder.encode("123"))
+//                .roles("user")
+//                .and()
+//                .withUser("admin")
+//                .password(passwordEncoder.encode("123"))
+//                .roles("admin")
+//                // 配置auth的加密方式为passwordEncoder
+//                .and()
+//                .passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
     }
 
@@ -73,7 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 // 登录成功后跳转路径
-                .defaultSuccessUrl("/home");
+                .defaultSuccessUrl("/home").permitAll()
+                .failureUrl("/login/error");
         // 关闭跨域攻击
         http.csrf().disable();
     }
