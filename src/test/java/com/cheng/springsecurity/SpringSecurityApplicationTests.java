@@ -13,7 +13,7 @@ class SpringSecurityApplicationTests {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void test() {
+    public void test() {
         // 加密
         String encode = passwordEncoder.encode("123");
         System.out.println(encode);
