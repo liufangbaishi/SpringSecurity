@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (StrUtil.isEmpty(username)) {
             throw new RuntimeException("用户名不能为空");
         }
-        // 根据用户名获    取用户信息
+        // 根据用户名获取用户信息
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, username);
         SysUser sysUser = sysUserMapper.selectOne(wrapper);

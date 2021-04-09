@@ -2,7 +2,6 @@ package com.cheng.springsecurity.auth;
 
 import com.cheng.springsecurity.response.Result;
 import com.cheng.springsecurity.response.ResultCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -12,8 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
+/**
+ * 登录成功
+ */
 @Component
 public class MyAuthenticationFailureHandler extends JSONAuthentication implements AuthenticationFailureHandler {
 
