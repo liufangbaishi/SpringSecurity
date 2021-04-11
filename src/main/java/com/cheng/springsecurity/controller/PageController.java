@@ -1,5 +1,6 @@
 package com.cheng.springsecurity.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,8 @@ public class PageController {
      * @return
      */
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ROLE_user')")
+    // hasAuthority需要角色ROLE_前缀  hasRole不需要前缀
     public String users(){
         return "users";
     }
@@ -33,6 +36,7 @@ public class PageController {
      * @return
      */
     @GetMapping("/roles")
+    @PreAuthorize("hasAnyAuthority('ROLE_admin', 'ROLE_user')")
     public String roles(){
         return "roles";
     }
@@ -42,6 +46,7 @@ public class PageController {
      * @return
      */
     @GetMapping("/menus")
+    @PreAuthorize("hasRole('admin')")
     public String menus(){
         return "menus";
     }
@@ -51,6 +56,7 @@ public class PageController {
      * @return
      */
     @GetMapping("/others")
+    @PreAuthorize("hasRole('user')")
     public String others(){
         return "others";
     }

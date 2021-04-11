@@ -39,7 +39,7 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir(scanner("请输入你的项目路径") + "/src/main/java");
-        gc.setAuthor("xiaowei");
+        gc.setAuthor("wei");
         //生成之后是否打开资源管理器
         gc.setOpen(false);
         //重新生成时是否覆盖文件

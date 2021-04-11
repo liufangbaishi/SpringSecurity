@@ -36,6 +36,7 @@ public enum ResultCode implements CustomizeResultCode{
     USER_ACCOUNT_NOT_EXIST(2007, "账号不存在"),
     USER_ACCOUNT_ALREADY_EXIST(2008, "账号已存在"),
     USER_ACCOUNT_USE_BY_OTHERS(2009, "您的登录已经超时或者已经在另一台机器登录，您被迫下线"),
+    USER_SESSION_INVALID(2010, "登录已超时"),
 
     /* 业务错误 */
     NO_PERMISSION(4001, "没有权限"),

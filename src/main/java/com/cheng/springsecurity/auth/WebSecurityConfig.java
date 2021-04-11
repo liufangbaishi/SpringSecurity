@@ -4,14 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -37,6 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyLogoutHandler logoutHandler;
     @Autowired
     private MyLogoutSuccessHandler logoutSuccessHandler;
+    @Autowired
+    private MyInvalidSessionStrategy sessionStrategy;
+    @Autowired
+    private MyExpiredSessionStrategy expiredSessionStrategy;
     /**
      * 通过auth可以在内存中构建虚拟的用户名和密码
      * @param auth
@@ -59,10 +67,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // 允许登录界面通过
                 .antMatchers("/login").permitAll()
-                .antMatchers("/users","/roles")
-                .hasAnyAuthority("ROLE_user","ROLE_admin")
-                .antMatchers("/menus","/others")
-                .hasAnyRole("admin")
+//                .antMatchers("/users","/roles")
+                // ROLE_user和ROLE_admin这两个角色，可以访问/users和/roles这两个控制器
+//                .hasAnyAuthority("ROLE_user","ROLE_admin")
+//                .antMatchers("/menus","/others")
+//                .hasAnyRole("admin")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -86,7 +95,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(authenticationEntryPoint);
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .sessionManagement().invalidSessionStrategy(sessionStrategy)
+                // 最大允许登录数量
+                .maximumSessions(1)
+                // 是否允许另一个账户登录  true:无法登录，返回失败，false:允许登录，将对方挤下线
+                .maxSessionsPreventsLogin(false)
+                // 被挤下线处理方式
+                .expiredSessionStrategy(expiredSessionStrategy);
+                 // 无状态的,任何时候都不会使用session
+                // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 关闭跨域攻击
         http.csrf().disable();
     }

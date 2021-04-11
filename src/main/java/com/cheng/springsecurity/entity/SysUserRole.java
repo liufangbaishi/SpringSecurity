@@ -1,6 +1,7 @@
 package com.cheng.springsecurity.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -10,23 +11,34 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ * 系统管理 - 用户角色关联表 
  * </p>
  *
- * @author xiaowei
- * @since 2021-03-22
+ * @author wei
+ * @since 2021-04-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SysUserRole对象", description="")
+@ApiModel(value="SysUserRole对象", description="系统管理 - 用户角色关联表 ")
 public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
+    @ApiModelProperty(value = "主键")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-    private Integer roleId;
+    @ApiModelProperty(value = "角色ID")
+    private Long roleId;
+
+    @ApiModelProperty(value = "用户ID")
+    private Long userId;
+
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 
 
 }
